@@ -15,8 +15,7 @@ public:
             new sf::RenderWindow(sf::VideoMode(imgs->get_size() * scale, imgs->get_size() * scale),
                                  "shimeji", sf::Style::Titlebar | sf::Style::Close);
         window->setFramerateLimit(60);
-        window->setPosition(
-            {rand(0, sf::VideoMode::getDesktopMode().width - (imgs->get_size() * scale)), 0});
+        window->setPosition({rand(0, Utils::get_screen_width() - (imgs->get_size() * scale)), 0});
 
         update_frame();
     }

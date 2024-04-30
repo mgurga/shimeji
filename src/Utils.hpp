@@ -87,6 +87,16 @@ public:
             }
         }
     }
+
+    static int get_screen_width() {
+        Display* display = XOpenDisplay(NULL);
+        auto s = DefaultScreenOfDisplay(display);
+        int w = s->width;
+
+        XCloseDisplay(display);
+
+        return s->width;
+    }
 };
 
 #undef None
