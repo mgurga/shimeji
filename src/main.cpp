@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 
-#define STB_IMAGE_IMPLEMENTATION
 #include "Manager.hpp"
 
 int main() {

@@ -4,18 +4,21 @@
 #include <random>
 
 #include "ShimejiPack.hpp"
+#include "System.hpp"
 #include "Utils.hpp"
 
 class Shimeji {
 public:
     Shimeji() : image_pack(nullptr), x(0), y(0), scale(1), rng(nullptr) {}
     Shimeji(ShimejiPack* imgs, float scale, std::mt19937* rng) :
-        image_pack(imgs), x(0), y(0), scale(scale), rng(rng) {
+        image_pack(imgs), scale(scale), rng(rng) {
         window =
             new sf::RenderWindow(sf::VideoMode(imgs->get_size() * scale, imgs->get_size() * scale),
                                  "shimeji", sf::Style::Titlebar | sf::Style::Close);
         window->setFramerateLimit(60);
-        window->setPosition({rand(0, Utils::get_screen_width() - (imgs->get_size() * scale)), 0});
+        x = rand(0, Utils::get_screen_width() - (imgs->get_size() * scale));
+        y = 1;
+        window->setPosition({x, y});
 
         update_frame();
     }

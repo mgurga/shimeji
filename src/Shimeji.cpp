@@ -15,6 +15,9 @@ bool Shimeji::tick() {
         window->draw(spr);
         window->display();
     }
+
+    window->setPosition({x, y});
+
     return true;
 }
 
@@ -22,10 +25,10 @@ void Shimeji::update_frame() {
     auto base_img = get_texture().copyToImage();
     sf::Image scaled_img;
     scaled_img.create(base_img.getSize().x * scale, base_img.getSize().y * scale);
-    Utils::resizeImage(base_img, scaled_img);
+    System::resizeImage(base_img, scaled_img);
 
-    Utils::setShape(window->getSystemHandle(), scaled_img);
-    Utils::setTransparency(window->getSystemHandle(), 255);
+    System::setShape(window->getSystemHandle(), scaled_img);
+    System::setTransparency(window->getSystemHandle(), 255);
 
     spr.setTexture(get_texture(), true);
     spr.setPosition(0, 0);
