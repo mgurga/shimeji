@@ -25,10 +25,15 @@ public:
 
     bool tick();
     void update_frame();
+    void update_frame(int framenum) {
+        curframe = framenum;
+        update_frame();
+    }
 
     sf::Texture& get_texture() { return image_pack->get_texture(curframe); }
     int get_x() { return x; }
     int get_y() { return y; }
+    int get_size() { return get_texture().getSize().y * scale; }
     int rand(int min, int max) {
         std::uniform_int_distribution<int> gen(min, max);
         return gen(*rng);

@@ -8,6 +8,7 @@
 // clang-format on
 
 #include <limits.h>
+#include <string.h>
 
 #include <iostream>
 #include <string>
@@ -36,7 +37,7 @@ public:
         Atom window_type_atom = XInternAtom(d, "_NET_WM_WINDOW_TYPE", false);
 
         // iterate all windows
-        std::cout << "got " << get_all_windows(d, root).size() << " total windows" << std::endl;
+        // std::cout << "got " << get_all_windows(d, root).size() << " total windows" << std::endl;
         for (Window w : get_all_windows(d, root)) {
             int winx, winy;
             unsigned int winwidth, winheight, trash;
@@ -64,6 +65,7 @@ public:
             if (to_add) add_surface(winx, winy, winwidth, winheight);
         }
 
+        XCloseDisplay(d);
         return out;
     }
 
@@ -144,6 +146,26 @@ public:
                 resizedImage.setPixel(x, y, originalImage.getPixel(origX, origY));
             }
         }
+    }
+
+    static void set_always_on_top(Window w, bool enabled = true) {
+        Display* d = XOpenDisplay(NULL);
+        static Atom wmStateAbove = XInternAtom(d, "_NET_WM_STATE_ABOVE", 1);
+        static Atom wmNetWmState = XInternAtom(d, "_NET_WM_STATE", 1);
+
+        if (wmStateAbove) {
+            XClientMessageEvent emsg;
+            memset(&emsg, 0, sizeof(emsg));
+            emsg.type = ClientMessage;
+            emsg.window = w;
+            emsg.message_type = wmNetWmState;
+            emsg.format = 32;
+            emsg.data.l[0] = enabled;
+            emsg.data.l[1] = wmStateAbove;
+            XSendEvent(d, RootWindow(d, 0), false,
+                       SubstructureRedirectMask | SubstructureNotifyMask, (XEvent*)&emsg);
+        }
+        XCloseDisplay(d);
     }
 
 private:

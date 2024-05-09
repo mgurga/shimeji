@@ -2,6 +2,29 @@
 
 bool Shimeji::tick() {
     if (window->isOpen()) {
+        System::set_always_on_top(window->getSystemHandle());
+        auto surfs = System::get_window_surfaces();
+
+        bool can_fall = true;
+        for (Surface& s : surfs) {
+            if (s.get_type() == SurfaceType::Floor) {
+                if (s.get_x() < get_x() && s.get_x() + s.get_width() > get_x()) {
+                    if (s.get_y() <= get_y() + get_size() &&
+                        s.get_y() + s.get_height() >= get_y() + get_size()) {
+                        can_fall = false;
+                        y = s.get_y() - get_size();
+                    }
+                }
+            }
+        }
+
+        if (can_fall) {
+            y += 4;
+            update_frame(3);
+        } else {
+            update_frame(0);
+        }
+
         sf::Event event;
         while (window->pollEvent(event)) {
             if (event.type == sf::Event::Closed ||
